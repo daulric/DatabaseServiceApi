@@ -1,12 +1,22 @@
 const express = require("express")
 const { FirebaseApp } = require("./Api/FirebaseApp.js")
 
+const bodyParser = require("body-parser")
+
+var jsonParser = bodyParser.json()
+
 const app = express();
 const DB_Retrieval_Router = express.Router();
 const DB_RetrieveParamRouter = express.Router({mergeParams: true});
 
+const DB_SetDataRouter = express.Router();
+const DB_SetDataRouterParams = express.Router({mergeParams: true})
+
 app.use("/retrieve", DB_Retrieval_Router)
+app.use("/push", DB_SetDataRouter)
+
 DB_Retrieval_Router.use("/" ,DB_RetrieveParamRouter)
+DB_SetDataRouter.use("/", DB_SetDataRouterParams)
 
 const port = 3000
 
@@ -28,8 +38,6 @@ DB_RetrieveParamRouter.get("/:path/:user", (req, res) => {
     } else {
         newUserPath = user
     }
-    
-    console.log(newUserPath)
 
     const db = new FirebaseApp(path)
 
@@ -40,8 +48,32 @@ DB_RetrieveParamRouter.get("/:path/:user", (req, res) => {
 
 })
 
-app.use(express.json())
+// Pushing Data Purpose!
+// -- Here for the Work
 
+DB_SetDataRouter.route("/").get((req, res) => {
+    res.send("Waiting to Set Data!")
+})
+
+DB_SetDataRouterParams.post("/:path/:user", jsonParser, (req, res) => {
+    let path = req.params["path"]
+    let user = req.params["user"]
+
+    let extendedPath = req.query["path"]
+
+    let newUserPath
+
+    if (typeof(extendedPath) !== "undefined") {
+        newUserPath = `${user}/${extendedPath}`
+    } else {
+        newUserPath = user
+    }
+
+    let database = new FirebaseApp(path)
+    database.setValue(newUserPath, req.body)
+})
+
+app.use(express.json())
 app.listen(port, () => {
     console.log(`Starting Server on Port ${port}`)
 })
