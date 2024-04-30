@@ -3,6 +3,8 @@ const { FirebaseApp } = require("./Api/FirebaseApp.js")
 
 const bodyParser = require("body-parser")
 
+require("dotenv").config()
+
 var jsonParser = bodyParser.json()
 
 const app = express();
@@ -74,6 +76,6 @@ DB_SetDataRouterParams.post("/:path/:user", jsonParser, (req, res) => {
 })
 
 app.use(express.json())
-app.listen(port, () => {
+app.listen(process.env.PORT, () => {
     console.log(`Starting Server on Port ${port}`)
 })

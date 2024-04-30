@@ -1,7 +1,18 @@
+const dotenv = require("dotenv");
 const { initializeApp } = require("firebase/app");
 const { getDatabase, ref, set, onValue, get, child, remove } = require("firebase/database")
 
-const FirebaseConfig = require("./Keys/Firebase.json")
+dotenv.config()
+
+const FirebaseConfig = {
+    apiKey: process.env.apiKey,
+    authDomain: process.env.authDomain,
+    projectId: process.env.projectId,
+    storageBucket: process.env.storageBucket,
+    messagingSenderId: process.env.messagingSenderId,
+    appId: process.env.appId,
+    measurementId: process.env.measurementId
+}
 
 class FirebaseApp {
     constructor(path) {
@@ -10,7 +21,6 @@ class FirebaseApp {
       // Initialize Firebase
       const app = initializeApp(FirebaseConfig);
       this.db = getDatabase(app)
-
     }
 
     onUpdate(target, callback) {
