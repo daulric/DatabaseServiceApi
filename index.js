@@ -20,8 +20,6 @@ app.use("/push", DB_SetDataRouter)
 DB_Retrieval_Router.use("/" ,DB_RetrieveParamRouter)
 DB_SetDataRouter.use("/", DB_SetDataRouterParams)
 
-const port = 3000
-
 // Retrieval Purposes!
 DB_Retrieval_Router.route("/").get((req, res) => {
     res.status(200).send("Retrieval Ready!")
@@ -77,5 +75,5 @@ DB_SetDataRouterParams.post("/:path/:user", jsonParser, (req, res) => {
 
 app.use(express.json())
 app.listen(process.env.PORT, () => {
-    console.log(`Starting Server on Port ${port}`)
+    console.log(`Starting Server on Port ${process.env.PORT}`)
 })
