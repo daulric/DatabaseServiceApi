@@ -13,7 +13,6 @@ const FirebaseConfig = {
     appId: process.env.appId,
     measurementId: process.env.measurementId
 }
-
 class FirebaseApp {
     constructor(path) {
       this.path = `/${path}`
